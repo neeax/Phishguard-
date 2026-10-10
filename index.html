@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f14">
+  <meta name="description" content="PhishGuard is an offline educational URL risk checker.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>PhishGuard Mobile</title>
+  <style>
+    :root{color-scheme:dark;--bg:#080b10;--panel:#111720;--panel2:#0d1219;--line:#25303d;--text:#edf3fa;--muted:#9aa8b8;--red:#ff435d;--green:#38d996;--yellow:#ffca5c}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(900px 500px at 50% -10%,#172333 0%,var(--bg) 58%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+    .wrap{width:min(100%,720px);margin:auto;padding:20px 15px 32px}
+    header{display:flex;align-items:center;gap:12px;margin:8px 0 22px}
+    .logo{width:48px;height:48px;border:1px solid #49303b;border-radius:15px;display:grid;place-items:center;background:#1a1118;color:var(--red);font-size:26px;font-weight:900}
+    h1{font-size:1.35rem;line-height:1.2;margin:0;letter-spacing:.4px}
+    .sub{font-size:.84rem;color:var(--muted);margin-top:4px}
+    .pill{margin-left:auto;border:1px solid #315d4d;color:var(--green);border-radius:999px;padding:6px 9px;font-size:.72rem;white-space:nowrap}
+    .card{background:linear-gradient(180deg,#121923,#0e141c);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 14px 40px #0002}
+    .eyebrow{font-size:.72rem;letter-spacing:1.4px;color:var(--red);font-weight:800;text-transform:uppercase}
+    h2{font-size:1.05rem;margin:7px 0 8px}
+    p{color:var(--muted);line-height:1.5;font-size:.9rem;margin:7px 0 14px}
+    label{display:block;font-size:.84rem;font-weight:700;margin:15px 0 8px}
+    input{width:100%;padding:15px 14px;border-radius:13px;border:1px solid #344252;background:#080d13;color:var(--text);font:inherit;outline:none}
+    input:focus{border-color:#e84861;box-shadow:0 0 0 3px #e848611c}
+    .buttons{display:flex;gap:9px;margin-top:12px}
+    button{font:inherit;font-weight:750;border:0;border-radius:12px;padding:13px 15px;cursor:pointer}
+    .primary{background:var(--red);color:#19070b;flex:1}
+    .secondary{background:#202b38;color:var(--text);border:1px solid #334151}
+    button:active{transform:scale(.99)}
+    .result{display:none;margin-top:16px;border:1px solid var(--line);border-radius:16px;padding:15px;background:var(--panel2)}
+    .result.show{display:block}
+    .resultHead{display:flex;align-items:center;gap:12px}
+    .lamp{width:13px;height:13px;border-radius:50%;background:var(--yellow);box-shadow:0 0 18px currentColor;flex:none}
+    .result h3{margin:0;font-size:1.02rem}
+    .score{margin-left:auto;font-weight:850;font-size:1.05rem}
+    .meter{height:8px;border-radius:20px;background:#27313d;margin:14px 0 10px;overflow:hidden}
+    .fill{height:100%;width:0%;border-radius:20px;transition:width .35s}
+    ul{padding-left:20px;color:var(--muted);font-size:.87rem;line-height:1.55;margin-bottom:0}
+    li{margin:4px 0}
+    .safe-note{font-size:.78rem;color:#8d9aab;border-top:1px solid var(--line);padding-top:12px;margin-top:14px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .mini{background:#0b1118;border:1px solid var(--line);border-radius:14px;padding:13px}
+    .mini strong{display:block;font-size:.91rem;margin-bottom:5px}
+    .mini span{color:var(--muted);font-size:.78rem;line-height:1.4;display:block}
+    footer{text-align:center;color:#6f7d8d;font-size:.75rem;padding:10px 0 0}
+    .install{display:none;width:100%;margin-top:10px;background:#202b38;color:var(--text);border:1px solid #344252}
+    @media(min-width:600px){.wrap{padding-top:30px}.card{padding:22px}.grid{grid-template-columns:repeat(4,1fr)}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true">P</div>
+      <div><h1>PHISHGUARD</h1><div class="sub">Mobile URL Risk Checker · Educational Demo</div></div>
+      <div class="pill">● OFFLINE-READY</div>
+    </header>
+
+    <section class="card">
+      <div class="eyebrow">Link inspection</div>
+      <h2>Check a suspicious URL</h2>
+      <p>Paste a link to check for common warning signs. This is a heuristic demo, not a guarantee that a site is safe or malicious.</p>
+      <label for="url">Website URL</label>
+      <input id="url" type="text" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="https://example.com">
+      <div class="buttons">
+        <button class="primary" id="check">ANALYZE URL</button>
+        <button class="secondary" id="clear">CLEAR</button>
+      </div>
+      <div class="result" id="result" aria-live="polite">
+        <div class="resultHead"><div class="lamp" id="lamp"></div><h3 id="level">Risk assessment</h3><div class="score" id="score">0/100</div></div>
+        <div class="meter"><div class="fill" id="fill"></div></div>
+        <p id="summary"></p>
+        <strong>Signals found</strong>
+        <ul id="signals"></ul>
+        <div class="safe-note">PhishGuard does not open links, submit forms, collect passwords, or contact the target website. A low score does not prove a URL is safe.</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="eyebrow">Quick guide</div>
+      <h2>What to look for</h2>
+      <div class="grid">
+        <div class="mini"><strong>Lookalike domains</strong><span>Check spelling carefully and avoid unexpected login links.</span></div>
+        <div class="mini"><strong>Urgent messages</strong><span>Threats or prizes that pressure you to act fast are suspicious.</span></div>
+        <div class="mini"><strong>HTTPS isn't enough</strong><span>A padlock encrypts a connection; it doesn't prove the site is trustworthy.</span></div>
+        <div class="mini"><strong>Verify separately</strong><span>Visit the official app or type the known website address yourself.</span></div>
+      </div>
+    </section>
+    <button class="install" id="install">Install PhishGuard</button>
+    <footer>OFFLINE DEMO · DEVELOPED BY NEEAX<br>For awareness and classroom demonstrations only.</footer>
+  </main>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const input = $('url'), result = $('result'), lamp = $('lamp'), fill = $('fill');
+  let installPrompt = null;
+  const riskyWords = ['login','verify','verification','password','secure','account','update','wallet','billing','payment','free','gift','prize','bonus','support'];
+  $('check').addEventListener('click', () => {
+    const raw = input.value.trim();
+    if (!raw) { input.focus(); input.setCustomValidity('Paste a URL first.'); input.reportValidity(); return; }
+    input.setCustomValidity('');
+    let u, host = '', points = 0, reasons = [];
+    try {
+      const normalized = /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(raw) ? raw : 'https://' + raw;
+      u = new URL(normalized);
+      host = u.hostname.toLowerCase();
+      if (!['http:','https:'].includes(u.protocol)) { points += 45; reasons.push('Unusual URL protocol'); }
+      if (u.protocol !== 'https:') { points += 10; reasons.push('Not using HTTPS'); }
+      if (u.username || u.password) { points += 25; reasons.push('Contains username/password before the host'); }
+      if (host.startsWith('xn--') || host.split('.').some(x => x.startsWith('xn--'))) { points += 20; reasons.push('Internationalized/punycode domain — inspect carefully'); }
+      if (/\\d{1,3}(\\.\\d{1,3}){3}/.test(host)) { points += 25; reasons.push('Uses an IP address instead of a normal domain'); }
+      if (host.split('.').length > 4) { points += 10; reasons.push('Many subdomains'); }
+      if (host.includes('-')) { points += 5; reasons.push('Hyphen in domain name'); }
+      if (raw.length > 100) { points += 8; reasons.push('Unusually long URL'); }
+      if (u.href.includes('@')) { points += 10; reasons.push('Contains @ character'); }
+      const combined = (host + u.pathname + u.search).toLowerCase();
+      const foundWords = riskyWords.filter(w => combined.includes(w));
+      if (foundWords.length) { points += Math.min(24, foundWords.length * 6); reasons.push('Contains sensitive or lure-related words: ' + foundWords.join(', ')); }
+      if (host.endsWith('.zip') || host.endsWith('.mov')) { points += 10; reasons.push('Uses a file-like top-level domain; verify carefully'); }
+      if (!reasons.length) reasons.push('No common warning signs detected by this simple checker');
+    } catch (e) {
+      points = 60; reasons.push('URL could not be parsed — check the spelling and format');
+    }
+    points = Math.min(100, points);
+    let level, color, summary;
+    if (points >= 50) { level='HIGH RISK'; color='var(--red)'; summary='Several warning signs were detected. Do not enter personal information; verify the link through an official channel.'; }
+    else if (points >= 25) { level='SUSPICIOUS'; color='var(--yellow)'; summary='Some warning signs were detected. Be cautious and verify the domain independently.'; }
+    else { level='LOWER RISK'; color='var(--green)'; summary='Few common warning signs were detected. This does not mean the website is safe.'; }
+    $('level').textContent = level; $('score').textContent = points + '/100';
+    $('summary').textContent = summary; lamp.style.background = color; lamp.style.color = color;
+    fill.style.width = points + '%'; fill.style.background = color;
+    $('signals').replaceChildren(...reasons.map(reason => { const li=document.createElement('li'); li.textContent=reason; return li; }));
+    result.classList.add('show');
+  });
+  $('clear').addEventListener('click', () => { input.value=''; result.classList.remove('show'); input.focus(); });
+  input.addEventListener('keydown', e => { if(e.key==='Enter') $('check').click(); });
+  window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt=e; $('install').style.display='block'; });
+  $('install').addEventListener('click', async () => { if(!installPrompt) return; installPrompt.prompt(); await installPrompt.userChoice; installPrompt=null; $('install').style.display='none'; });
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 # 🛡️ PhishGuard Mobile
 
-A mobile-friendly cybersecurity awareness app that checks URLs for common phishing warning signs. PhishGuard is designed for classroom demonstrations and offline use after the app has been loaded once.
+A mobile-friendly cybersecurity awareness app that checks URLs for common phishing warning signs. PhishGuard is designed
+offline use after the app has been loaded once.
 
 ## 🔎 1. Check a suspicious URL
 
@@ -17,22 +18,6 @@ PhishGuard can display three levels:
 
 > A low score does **not** prove that a website is safe. This demo uses simple URL heuristics and does not query a live phishing database.
 
-## 🌐 2. Put it online (GitHub Pages)
-
-GitHub Pages hosts the app over HTTPS, which is required for service workers and installable web apps.
-
-1. Upload all app files to the **root** of your GitHub repository:
-   - `index.html`
-   - `manifest.json`
-   - `sw.js`
-   - `icon.svg`
-   - `icon-192.png`
-   - `icon-512.png`
-2. Open **Settings → Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**.
-4. Select branch `main` and folder `/(root)`, then tap **Save**.
-5. Open the **Actions** tab and wait for **Pages build and deployment** to finish successfully.
-6. Open the GitHub Pages URL shown in Settings → Pages.
 
 ## 📲 3. Install it like an app
 
@@ -69,7 +54,6 @@ These are clues, not proof. Legitimate sites can trigger warnings, and phishing 
 - **False positives and misses are possible.** Never rely on the score alone.
 - **HTTPS is not a trust guarantee.** It encrypts the connection but does not prove that a website is legitimate.
 - **Stay cautious.** Do not enter passwords, verification codes, payment details, or personal information on a suspicious site.
-- **For education only.** Use this project for cybersecurity awareness and demonstrations.
 
 ## 📁 Files
 
@@ -85,6 +69,4 @@ These are clues, not proof. Legitimate sites can trigger warnings, and phishing 
 
 ## 👨‍💻 Credits
 
-**PHISHGUARD — OFFLINE DEMO · DEVELOPED BY NEEAX**
-
-Made for cybersecurity awareness and educational demonstration.
+**PHISHGUARD — OFFLINE DEMO · DEVELOPED BY NEEAX* 
